@@ -1,8 +1,8 @@
-'use strict';
+
 
 import React, {
   PureComponent,
-} from "react";
+} from 'react';
 
 import {
   Animated,
@@ -12,7 +12,7 @@ import {
   View,
   Easing,
   ViewPropTypes
-} from "react-native";
+} from 'react-native';
 
 import PropTypes from 'prop-types';
 
@@ -306,7 +306,7 @@ export default class Slider extends PureComponent {
 
   _handleStartShouldSetPanResponder = (e: Object, /*gestureState: Object*/): boolean => {
     // Should we become active when the user presses down on the thumb?
-    return this._thumbHitTest(e);
+    return this.props.handleOnPress ? true : this._thumbHitTest(e);
   };
 
   _handleMoveShouldSetPanResponder = (/*e: Object, gestureState: Object*/): boolean => {
@@ -371,7 +371,7 @@ export default class Slider extends PureComponent {
         trackSize: this._trackSize,
         thumbSize: this._thumbSize,
         allMeasured: true,
-      })
+      });
     }
   };
 
@@ -387,9 +387,8 @@ export default class Slider extends PureComponent {
   _getValue = (gestureState: Object, nativeEvent: Object | undefined) => {
     var thumbTouchRect = this._getThumbTouchRect();
     var length = this.state.containerSize.width - this.state.thumbSize.width;
-    var pressLeft = (this.props.handleOnPress && nativeEvent && gestureState.dx === 0) ? nativeEvent.locationX : 0;
+    var pressLeft = (this.props.handleOnPress && nativeEvent && gestureState.dx === 0) ? nativeEvent.locationX - (this.props.thumbTouchSize.width / 2) : 0;
     var thumbLeft = pressLeft || this._previousLeft + gestureState.dx;
-
     var ratio = thumbLeft / length;
 
     if (this.props.step) {
